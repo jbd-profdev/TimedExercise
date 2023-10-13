@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations;
 namespace TimedExercise.Data.Entities;
 
 public partial class Reply
@@ -11,7 +11,7 @@ public partial class Reply
 
     public int AuthorId { get; set; }
 
-    public int ParentId { get; set; }
+    public int CommentId { get; set; }
 
     public virtual User Author { get; set; } = null!;
 
