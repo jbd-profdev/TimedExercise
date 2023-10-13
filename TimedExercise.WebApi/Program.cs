@@ -1,4 +1,5 @@
 using TimedExercise.Data;
+using TimedExercise.Services.ReplyS;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SocialMediaDbContext>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<IReplyService, ReplyService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
