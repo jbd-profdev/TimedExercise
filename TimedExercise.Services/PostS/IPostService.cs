@@ -4,5 +4,5 @@ namespace TimedExercise.Services.PostS;
 
 public interface IPostService
 {
-    Task<bool> CreatePostAsync(PostCreate model);
+    Task<bool> CreatePostAsync(int authorId, PostCreate model);
 }

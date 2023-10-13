@@ -14,12 +14,13 @@ public class PostService : IPostService
         _context = context;
     }
 
-    public async Task<bool> CreatePostAsync(PostCreate model)
+    public async Task<bool> CreatePostAsync(int authorId, PostCreate model)
     {
         Post entity = new()
         {
             Title = model.Title,
-            Text = model.Text
+            Text = model.Text,
+            AuthorId = authorId
         };
 
         _context.Posts.Add(entity);
