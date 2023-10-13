@@ -1,10 +1,17 @@
 using TimedExercise.Data;
+using TimedExercise.Services.PostS;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<SocialMediaDbContext>();
 builder.Services.AddControllers();
+
+
+
+
+builder.Services.AddScoped<IPostService, PostService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
