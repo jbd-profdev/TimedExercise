@@ -13,29 +13,20 @@ public class CommentService : ICommentService
         _dbContext = dbContext;
     }
 
-    // public async Task<CommentDetail?> CreateCommentAsync(CommentCreate request)
-    // {
-    //     Comment entity = new()
-    //     {
-    //         Text = request.Text
-    //     };
+    public async Task<bool> CreateCommentAsync(int authorId, int postId, CommentCreate request)
+    {
+        Comment entity = new()
+        {
+            Text = request.Text,
+            AuthorId = authorId,
+            PostId = postId
+        };
 
-    //     _dbContext.Comments.Add(entity);
-    //     var NumberOfChanges = await _dbContext.SaveChangesAsync();
+        _dbContext.Comments.Add(entity);
+        await _dbContext.SaveChangesAsync();
 
-    //     if (NumberOfChanges != 1)
-    //         return null;
-
-    //     CommentDetail detail = new()
-    //     {
-    //         Id = entity.Id,
-    //         Text = entity.Text,
-    //         AuthorId = entity.AuthorId,
-    //         PostId = entity.AuthorId
-
-    //     };
-    //     return detail;
-    // }
+        return true;
+    }
 
     public async Task<CommentDetail?> GetCommentByPostIdAsync(int postId)
     {

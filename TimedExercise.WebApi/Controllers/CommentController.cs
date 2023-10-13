@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TimedExercise.Data;
 using TimedExercise.Models.Comment;
 using TimedExercise.Services.CommentS;
 
@@ -9,35 +11,43 @@ namespace TimedExercise.WebApi.Controllers;
 public class CommentController : ControllerBase
 {
     private readonly ICommentService _commentService;
-    public CommentController(ICommentService commentService)
+    private readonly SocialMediaDbContext _db;
+    public CommentController(ICommentService commentService, SocialMediaDbContext db)
     {
         _commentService = commentService;
+        _db = db;
     }
 
-    // [HttpPost]
-    // public async Task<IActionResult> CreateComment([FromBody] CommentCreate request)
-    // {
-    //     if (!ModelState.IsValid)
-    //         return BadRequest(ModelState);
-
-    //     var response = await _commentService.CreateCommentAsync(request);
-    //     if (response is not null)
-    //         return Ok(response);
-
-    //     return BadRequest();
-    // }
-
-    [HttpGet("/commentPostId/{postId:int}")]
-    public async Task<IActionResult> GetCommentByPostId([FromRoute] int postId)
+    [HttpPost("create/{authorId:int}/{postId:int}")]
+    public async Task<IActionResult> CreateComment(int authorId, int postId, [FromBody] CommentCreate request)
     {
-        CommentDetail? detail = await _commentService.GetCommentByPostIdAsync(postId);
-        return detail is not null ? Ok(detail) : NotFound();
+        if (ModelState.IsValid)
+        {
+            var response = await _commentService.CreateCommentAsync(authorId, postId, request);
+            if (response == true)
+                return Ok(response);
+        }
+        return BadRequest(ModelState);
     }
+
+    // [HttpGet("/commentPostId/{postId:int}")]
+    // public async Task<IActionResult> GetCommentByPostId([FromRoute] int postId)
+    // {
+    //     CommentDetail? detail = await _commentService.GetCommentByPostIdAsync(postId);
+    //     return detail is not null ? Ok(detail) : NotFound();
+    // }
 
     [HttpGet("/commentAuthorId/{authorId:int}")]
     public async Task<IActionResult> GetCommentByAuthorId([FromRoute] int authorId)
     {
         CommentDetail? detail = await _commentService.GetCommentByAuthorIdAsync(authorId);
         return detail is not null ? Ok(detail) : NotFound();
+    }
+
+    [HttpGet("/commentPostId/{postId:int}")]
+    public async Task<IActionResult> GetCommentsForPost(int postId)
+    {
+        var comments = await _db.Comments.Where(c => c.PostId == postId).ToListAsync();
+        return Ok(comments);
     }
 }
