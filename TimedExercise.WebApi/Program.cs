@@ -1,5 +1,7 @@
 using TimedExercise.Data;
 using TimedExercise.Services.CommentS;
+using TimedExercise.Services.PostS;
+using TimedExercise.Services.UserS;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,9 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SocialMediaDbContext>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<ICommentService, CommentService>();
-        //post service
         //like service
         //reply service
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IUserService, UserService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
