@@ -10,13 +10,7 @@ namespace TimedExercise.Models.Reply
 {
     public class ReplyCreate
     {   
-        [Key] 
-        public int Id { get; set; }
         [MaxLength(256)]
         public string Text { get; set;} = string.Empty;
-        [ForeignKey("User")]
-        public int AuthorId { get; set; }
-        [ForeignKey("comment")]
-        public int ParentId { get; set; }
     }
 }
