@@ -23,7 +23,7 @@ public class ReplyService : IReplyService
         {
             Text = model.Text,
             AuthorId = authorId,
-            CommentId = commentId
+            ParentId = commentId
         };
 
         _context.Replies.Add(entity);
