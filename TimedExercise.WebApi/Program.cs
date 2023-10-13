@@ -1,4 +1,5 @@
 using TimedExercise.Data;
+using TimedExercise.Services.CommentS;
 using TimedExercise.Services.PostS;
 using TimedExercise.Services.ReplyS;
 using TimedExercise.Services.UserS;
@@ -8,10 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<SocialMediaDbContext>();
 builder.Services.AddControllers();
-
-
-
-
+builder.Services.AddScoped<ICommentService, CommentService>();
+        //like service
+        //reply service
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IReplyService, ReplyService>();
