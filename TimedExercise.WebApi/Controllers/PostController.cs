@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using TimedExercise.Models.Post;
 using TimedExercise.Data;
+using TimedExercise.Services.UserS;
+using Microsoft.EntityFrameworkCore;
 
 namespace TimedExercise.WebApi.Controllers;
 
@@ -12,29 +14,29 @@ namespace TimedExercise.WebApi.Controllers;
 public class PostController : ControllerBase
 {
     private readonly SocialMediaDbContext _db;
-    public PostController(SocialMediaDbContext db)
+    private readonly IPostService _postService;
+
+    private readonly IUserService _userService;
+    public PostController(SocialMediaDbContext db, IPostService postService, IUserService userService)
     {
         _db = db;
-    }
-    private readonly IPostService _postService;
-    public PostController(IPostService postService)
-    {
         _postService = postService;
+        _userService = userService;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreatePost([FromBody] PostCreate post)
+    [HttpPost("~/api/Post/{authorId:int}")]
+    public async Task<IActionResult> CreatePost(int authorId, [FromBody] PostCreate request)
     {
-        Post newPost = new()
-        {
-            Title = post.Title,
-            Text = post.Text
-        };
-
-        _db.Posts.Add(newPost);
-        await _db.SaveChangesAsync();
-
-        return Ok(newPost);
+        var response = await _postService.CreatePostAsync(authorId, request);
+        if(response == true )
+            return Ok(response);
+        return BadRequest();
     }
 
+    [HttpGet("~/api/Post")]
+    public async Task<IActionResult> GetAllPosts()
+    {
+        var posts = await _db.Posts.ToListAsync();
+        return Ok(posts);
+    }
 }
